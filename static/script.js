@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $('#alert').hide()
     $('#fileInput').on('change', function () {
         let fileNames = [];
         for (let i = 0; i < this.files.length; i++) {
