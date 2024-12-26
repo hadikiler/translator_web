@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Translator</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="/">File Translator</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#guid">GUID</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <section class="instructions">
+            <h2>Welcome to File Translator</h2>
+            <p>Please follow the instructions below to start using the translation service:</p>
+            <ol>
+                <li>Sign in with GitHub and obtain an API key from <a href="https://api.chatanywhere.org/v1/oauth/free/render" target="_blank">here</a>.</li>
+                <li>Paste the API key below to continue.</li>
+            </ol>
+        </section>
+
+        <!-- Upload Form -->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="text" id="apiKey" name="apiKey" class="form-control" placeholder="Enter your API Key" required>
+            </div>
+
+            <!-- Beautified File Input -->
+            <div class="form-group">
+                <input type="file" name="files" id="fileInput" class="d-none" multiple required >
+                <label for="fileInput" class="btn btn-outline-primary btn-block">
+                    <i class="fas fa-upload"></i> Choose Files
+                </label>
+                <span id="fileName" class="d-block mt-2"></span> <!-- Show file names here -->
+            </div>
+
+            <!-- Conversational Translation Checkbox -->
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="conversational" id="conversational" class="mr-2"> Conversational Translation
+                </label>
+            </div>
+
+            <!-- Language Selection Dropdown -->
+            <div class="form-group">
+                <label for="language">Choose Target Language</label>
+                <select name="language" id="language" class="form-control">
+                    <option selected value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Persian">Persian</option> <!-- Persian -->
+                    <option value="Chinese">Chinese</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Italian">Italian</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn">Upload and Translate</button>
+        </form>
+
+
+        <div id="progressContainer" class="mt-4" style="display:none;">
+            <div class="loader mx-auto"></div>
+            <p>Progress: <span id="progressText">0%</span></p>
+            <div style="width: 100%; background: #eee; border: 1px solid #ccc;">
+                <div id="progressBar" class="bg-primary progress-bar progress-bar-striped progress-bar-animated" style="height: 20px; width: 0;"></div>
+            </div>
+        </div>
+
+        <div id="downloadLink" class="mt-4" style="display:none;">
+            <p>Translation completed! <a href="#" id="downloadFile" class="btn btn-success">Download the ZIP file</a></p>
+        </div>
+        <div id="alert" class="alert alert-danger" role="alert">
+        </div>
+    </div>
+
+    <!-- GUID Section (Replace with actual content later) -->
+    <section id="guid" class="p-4">
+        <h3>Your GUID Content Here</h3>
+        <br>
+        <h1>🎥 Subtitle Translator (English)</h1>
+
+        <p>This project is a tool for translating <code>.srt</code> subtitles from any language to any language. You can use this tool to process and translate subtitle files using an AI model. With this project, you will have 200 request credits <strong>per day</strong> to use.</p>
+        <p>However, for certain right-to-left (RTL) languages, like Persian (Farsi), you might need to adjust the text direction in your video player to ensure the subtitles display correctly.</p>
+        <br>
+        <p><strong>⚠️ Note</strong>: Please note that translating large subtitle files will take time, and if the file is too large, your credits may not suffice.</p>
+
+        <p><strong>🔎 Tested Languages</strong>: The project has only been tested on "Persian" and "English" so far.</p>
+
+        <h2>🛠 Prerequisites</h2>
+
+        <p>To use this program, you will need:</p>
+
+        <ol>
+            <li><strong>A GitHub account</strong>: If you do not already have a GitHub account, first <a href="https://github.com" target="_blank">sign up here</a>.</li>
+            <li><strong>Obtain an `API Key`</strong>: To use this tool, you need to obtain an `API Key`. You can do this through this link:</li>
+            <li>👉 <a href="https://api.chatanywhere.org/v1/oauth/free/render" target="_blank">Click here (free)</a></li>
+        </ol>
+
+        <h2>🌐 Supported Languages</h2>
+
+        <p>The Subtitle Translator supports a wide range of languages, including:</p>
+
+        <ul>
+            <li><strong>Left-to-Right (LTR):</strong> English, French, Spanish, German, etc.</li>
+            <li><strong>Right-to-Left (RTL):</strong> Persian, Arabic, Hebrew, etc.</li>
+        </ul>
+
+        <p>For RTL languages, additional steps may be required to ensure proper text alignment.</p>
+
+        <hr>
+
+        <h2>❓ Why Adjust Text Direction?</h2>
+
+        <p>Most video players default to left-to-right text alignment. When using translated subtitles in RTL languages, the text might appear misaligned or difficult to read. Adjusting the text direction ensures that:</p>
+
+        <ul>
+            <li>The text is properly aligned to the right.</li>
+            <li>Punctuation and sentence flow are displayed correctly.</li>
+        </ul>
+
+        <h2>🆘 Support</h2>
+
+        <p>For support, you can contact us via the following email address:</p>
+
+        <pre>
+        addii1385@gmail.com
+        </pre>
+
+        <br>
+
+        <p>based on <a href="https://github.com/chatanywhere/GPT_API_free" target="_blank">GPT API free</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container bg-dark text-center">
+            <p>&copy; 2024 File Translator. All rights reserved.</p>
+            <div>
+                <a href="#contact" class="text-white mr-4">Contact</a>
+                <a href="https://github.com/hadikiler/" target="_blank" class="text-white">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{#    <script src="{% static 'script.js' %}">#}
+    <script src="{% static 'script.js' %}">
+    // Display the selected file names below the file input
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+/* Custom Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header and Navbar */
+.navbar {
+    background-color: royalblue;
+}
+
+.navbar-brand {
+    color: white;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: white;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: lightblue;
+}
+
+/* Main Content */
+.container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.instructions h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.instructions ol {
+    margin: 20px 0;
+}
+
+.instructions li {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* Form and Upload */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form button {
+    background-color: royalblue;
+    color: white;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Progress Bar */
+#progressContainer {
+    margin-top: 20px;
+}
+
+#progressBar {
+    height: 20px;
+    background-color: royalblue;
+    width: 0;
+    border-radius: 4px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    /*color: white;*/
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    color: royalblue;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    footer a {
+        margin: 10px 0;
+        display: block;
+    }
+}
+
+
+/* Custom File Input Styles */
+#fileInput {
+    display: none; /* Hide the default file input */
+}
+
+#fileInput + label {
+    cursor: pointer;
+    text-align: center;
+}
+
+#fileInput + label:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+#fileInput + label i {
+    margin-right: 10px;
+}
+
+/* File name display */
+#fileName {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Optional: Add custom styling for the button */
+.btn-block {
+    width: 100%;
+}
+
+/* Optional: Additional custom styling */
+#fileInput + label {
+    padding: 15px;
+    font-size: 16px;
+    background-color: royalblue;
+    color: white;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#fileInput + label:hover {
+    background-color: #0056b3;
+}
+
+
+        /* Custom File Input Styles */
+        #fileInput {
+            display: none; /* Hide the default file input */
+        }
+        #fileInput + label {
+            cursor: pointer;
+            text-align: center;
+        }
+        #fileInput + label:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        #fileInput + label i {
+            margin-right: 10px;
+        }
+        #fileName {
+            font-size: 14px;
+            color: #333;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        #fileInput + label {
+            padding: 15px;
+            font-size: 16px;
+            background-color: royalblue;
+            color: white;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        #fileInput + label:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        footer {
+            margin-top: 50px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Animation for spinning effect */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3; /* Light gray */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            /*position: fixed;*/
+            /*top: 50%;*/
+            /*left: 50%;*/
+            transform: translate(-50%, -50%);
+        }
+
