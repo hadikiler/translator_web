@@ -42,3 +42,4 @@ tqdm
 typing_extensions
 urllib3
 yarl
+Django
