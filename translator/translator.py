@@ -31,8 +31,13 @@ def check_translate(original, translated):
     Check if the translation contains all sections of the original
     """
     original_sections = parse_srt(original)
+    org_length = len(original_sections)
     translated_sections = parse_srt(translated)
+    tr_length = len(translated_sections)
 
+    # check for extra part in translation
+    if org_length != tr_length:
+        return False
     # Check if all keys in the original are present in the translation
     for key in original_sections:
         if key not in translated_sections:
@@ -99,12 +104,13 @@ def send_request(llm, request, content, log=False):
             except Exception as e:
                 return False
 
-            half_res = response.content.replace('`', '')
+            half_res = response.content.replace('`', '').replace('srt', '', 1)  # delete description and symbols
             if check_translate(part, half_res):
                 full_res += ('\n\n' + half_res)  # save them in main text
                 break
             print('Some data lost, try again...')
-        print(f"translation part{counter} Completed...")
+        if not log:
+            print(f"translation part{counter} Completed...")
     return full_res
 
 
@@ -128,11 +134,11 @@ def translator(file_path, export_path, api_key, lang='persian', conversational=F
     )
 
     if conversational:
-        conversational = 'conversational'
+        conversational = '`conversational`'
     else:
         conversational = ''
 
-    request = f"""
+    old_request = f"""
     help me to translate some .srt text to {conversational} {lang},
     as response only write the result (without any symbol),
     remember we need number and times in text to make .srt file,
@@ -142,11 +148,19 @@ def translator(file_path, export_path, api_key, lang='persian', conversational=F
     I put the text in `` and the text:\n
     """
 
+    request = f"""
+    convert these subtitles in {conversational} {lang} but , i don't mean just translation ,
+    you should understand consept of text and rewrite it by yourself. 
+    focus on the concepts and making the translation natural , meaningful and fluent.
+    I put the text in `` , just give the result and Don't add a part to the translation , their format is .srt:
+    """
+
     content = reader(en_path=file_path)
     full_res = send_request(llm=llm, request=request, content=content)  # translation
     if not full_res:  # if limited
         print('limited...')
         return None
+
     translated_path = export_path + '/' + f"translated_{os.path.basename(file_path)}"
     writer(content=full_res, export_path=translated_path)
     Path.unlink(Path(file_path))  # delete old
