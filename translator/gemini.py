@@ -1,13 +1,12 @@
 from langchain_openai import ChatOpenAI
-from os import walk
+from my_translator import settings
 import concurrent.futures
-
-from openai import PermissionDeniedError
+from os import walk
 
 llm = ChatOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
     model="gemini-2.5-flash-preview-05-20",
-    api_key="AIzaSyDR49YtJPhn0QJB8Jh6FZM4gSliW9W47xg",
+    api_key=settings.API_KEY,
 )
 
 
