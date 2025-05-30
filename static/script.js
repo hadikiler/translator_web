@@ -24,6 +24,8 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (response) {
+                console.log(response['message'])
+                $('#downloadText').text(response['message'])
                 $('#downloadFile').attr('href', `/media/${response['zip_file']}`);
                 $('#downloadLink').show();
                 $('.loader').hide()
