@@ -39,8 +39,7 @@ def translate(import_path, export_path, lang, conversational, filename, llm, ind
         else:
             conversational = ""
 
-        request = (f"translate this .srt file to {conversational} {lang} Conceptual and accurate"
-                   f" And revise the sentence structures to make them clear, just give the result:\n") + text
+        request = (f"translate this .srt file to {conversational} {lang} Conceptual and accurate And revise the sentence structures to make them clear, just give the result:\n") + text
 
         response = llm.invoke(request).content
         write(f'{export_path}/{filename}', response)
