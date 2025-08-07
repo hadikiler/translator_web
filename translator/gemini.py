@@ -1,25 +1,17 @@
 from langchain_openai import ChatOpenAI
-from my_translator import settings
-import concurrent.futures
 from os import walk
+from pathlib import Path
+from google import genai
 
-llm = ChatOpenAI(
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    model="gemini-2.5-flash-preview-05-20",
-    api_key=settings.API_KEY,
-)
+# MODEL = "gemini-2.5-pro"  # Input token 1,000,000, Output token limit 65,536
+MODEL = "gemini-2.5-flash"  # Input token 1,000,000, Output token limit 65,536
+# MODEL = "gemini-2.0-flash"  # Output token limit 8,192
 
 
-def checker(text, llm):
-    request = "do you think is this .srt file ok and normal? just answer yes/no:\n" + text
-    response = llm.invoke(request).content
-    if "no" in response.lower():
-        return False
-    return True
+API_KEY = "AIzaSyDR49YtJPhn0QJB8Jh6FZM4gSliW9W47xg"
 
 
 def read(path):
-    text = ""
     with open(path, 'r') as reader:
         return reader.read()
 
@@ -29,44 +21,22 @@ def write(path, text):
         writer.write(text)
 
 
-def translate(import_path, export_path, lang, conversational, filename, llm, index):
-    error = {}
-    try:
-        text = read(f'{import_path}/{filename}')
-
-        if conversational:
-            conversational = "conversational"
-        else:
-            conversational = ""
-
-        request = (f"Please translate this .srt file into {lang} with accurate and meaningful interpretation. Also, revise the sentence structures to make them clearer and easier to read, just give the result:\n") + text
-
-        response = llm.invoke(request).content
-        write(f'{export_path}/{filename}', response)
-        error['state'] = True
-        error["message"] = f'file {index+1}: {filename} completed'
-
-    except Exception as e:
-        error['state'] = False
-        if "403" in str(e):
-            error["message"] = "please try with a VPN."
-        else:
-            error["message"] = e
-
-    return error
+def send_request(request, api_key):
+    if api_key == "" or len(api_key) < 8:
+        api_key = API_KEY
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model=MODEL, contents=request
+    )
+    return response.text
 
 
-def gemini_translate(import_path, export_path):
-    files = []
-    for _, _, filenames in walk(import_path):
-        files = filenames
-        break
+def translate(text, api_key, lang, conversational):
+    if conversational:
+        conversational = "conversational"
+    else:
+        conversational = ""
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
-        for index, filename in enumerate(files):
-            futures.append(executor.submit(translate, import_path, export_path, filename, llm, index))
-
-        for index, future in enumerate(concurrent.futures.as_completed(futures)):
-            result = future.result()
-            print(result["message"])
+    request = f"""Please translate this .srt file into {conversational} {lang} with accurate and meaningful interpretation.
+     Also, revise the sentence structures to make them clearer and easier to read, just give the result:\n\n""" + text
+    return send_request(request, api_key)

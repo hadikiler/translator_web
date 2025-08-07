@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from .gemini import translate, llm
+from .gemini import translate, write, read
 from django.views.decorators.csrf import csrf_exempt
 import concurrent.futures
 
@@ -37,7 +37,7 @@ def upload_file(request):
 
         global active_connection
         active_connection = True
-        # api_key = request.POST.get('apiKey')  # User's API key
+        api_key = request.POST.get('apiKey')  # User's API key
         conversational = request.POST.get('conversational', False)
         lang = request.POST.get('language')
         files = request.FILES.getlist('files')  # Multiple file upload
@@ -61,27 +61,18 @@ def upload_file(request):
             files = filenames
             break
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            for index, filename in enumerate(files):
-                futures.append(executor.submit(
-                    translate,
-                    source_dir,
-                    dest_dir,
-                    lang,
-                    conversational,
-                    filename,
-                    llm,
-                    index
-                ))
+        for filename in files:
+            if not active_connection:
+                return JsonResponse({'status': 'disconnected'}, status=499)
 
-            for future in concurrent.futures.as_completed(futures):
-                if not active_connection:
-                    print('break ...')
-                    return JsonResponse({'status': 'disconnected'}, status=499)
+            text = read(f'{source_dir}/{filename}')
+            try:
+                translated_text = translate(text, api_key, lang, conversational)
+                write(f'{dest_dir}/{filename}', translated_text)
+            except Exception as e:
+                return JsonResponse({'status': 'disconnected', "message": str(e)}, status=499)
 
-                result = future.result()
-                progress["remaining"] -= 1
+            progress["remaining"] -= 1
         # END gemini_translator
 
         dest_files_path = []
